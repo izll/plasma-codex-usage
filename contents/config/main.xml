@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+    <kcfgfile name=""/>
+
+    <group name="General">
+        <entry name="language" type="String">
+            <label>UI Language</label>
+            <default>system</default>
+        </entry>
+        <entry name="refreshInterval" type="Int">
+            <label>Refresh interval in minutes</label>
+            <default>5</default>
+        </entry>
+        <entry name="panelLayout" type="String">
+            <label>Panel layout direction (horizontal or vertical)</label>
+            <default>horizontal</default>
+        </entry>
+        <entry name="showIcon" type="Bool">
+            <label>Show Codex icon in panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="iconSize" type="Int">
+            <label>Panel icon size</label>
+            <default>0</default>
+        </entry>
+        <entry name="panelIcon" type="String">
+            <label>Panel icon style (chatgpt or openai)</label>
+            <default>chatgpt</default>
+        </entry>
+        <entry name="panelStyle" type="String">
+            <label>Panel display style (text, ring, or bar)</label>
+            <default>ring</default>
+        </entry>
+        <entry name="showWeekly" type="Bool">
+            <label>Show weekly usage in panel</label>
+            <default>true</default>
+        </entry>
+        <entry name="quickLinks" type="String">
+            <label>Quick links as JSON array [{name, url, icon}]</label>
+            <default>[]</default>
+        </entry>
+        <entry name="popupStyle" type="String">
+            <label>Widget display style (classic or card)</label>
+            <default>card</default>
+        </entry>
+        <entry name="enableNotifications" type="Bool">
+            <label>Send desktop notifications for usage thresholds</label>
+            <default>true</default>
+        </entry>
+        <entry name="enableUpdateCheck" type="Bool">
+            <label>Check for Codex CLI updates via npm registry</label>
+            <default>true</default>
+        </entry>
+        <entry name="cardOrder" type="String">
+            <label>Card visibility and order in popup as JSON array [{id, enabled}]</label>
+            <default>[{"id":"account","enabled":true},{"id":"usage","enabled":true},{"id":"tokens","enabled":true},{"id":"trend","enabled":true},{"id":"links","enabled":true}]</default>
+        </entry>
+        <entry name="processVisibility" type="String">
+            <label>Visibility mode when Codex is not running (always, hide_usage, or fully_hidden)</label>
+            <default>always</default>
+        </entry>
+        <entry name="processCheckInterval" type="Int">
+            <label>Process check interval in seconds</label>
+            <default>30</default>
+        </entry>
+        <entry name="useTimeAwareColors" type="Bool">
+            <label>Use time-proportional color thresholds instead of fixed 50/80/100%</label>
+            <default>true</default>
+        </entry>
+        <entry name="backgroundOpacity" type="Double">
+            <label>Background opacity (0.0 = transparent, 1.0 = opaque)</label>
+            <default>1.0</default>
+        </entry>
+        <entry name="scrollableContent" type="Bool">
+            <label>Enable scrollable content in card popup</label>
+            <default>false</default>
+        </entry>
+    </group>
+</kcfg>
