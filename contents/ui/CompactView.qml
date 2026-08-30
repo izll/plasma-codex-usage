@@ -40,7 +40,7 @@ Item {
                 anchors.fill: parent
                 source: (Plasmoid.configuration.panelIcon || "chatgpt") === "openai"
                     ? Qt.resolvedUrl("../icons/codex.svg")
-                    : Qt.resolvedUrl("../icons/chatgpt.png")
+                    : Qt.resolvedUrl("../icons/chatgpt.svg")
                 sourceSize: Qt.size(parent.width * Screen.devicePixelRatio, parent.height * Screen.devicePixelRatio)
                 fillMode: Image.PreserveAspectFit
                 smooth: true
