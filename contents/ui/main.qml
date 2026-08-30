@@ -74,6 +74,7 @@ PlasmoidItem {
     // ── Time-aware coloring ──
     property double nowTick: Date.now()
     readonly property real weeklyTimePct: elapsedPct(root.weeklyResetTime, root.weeklyWindowMinutes * 60000)
+    readonly property real secondaryTimePct: elapsedPct(root.secondaryResetTime, root.secondaryWindowMinutes * 60000)
 
     // ── Notification state ──
     property var alertedThresholds: ({})
@@ -778,6 +779,15 @@ PlasmoidItem {
                             radius: 5
                             color: root.getUsageColor(root.weeklyUsagePercent, root.useTimeAware ? root.weeklyTimePct : undefined)
                         }
+                        Rectangle {
+                            visible: root.useTimeAware && root.weeklyTimePct >= 0
+                            x: parent.width * Math.min(root.weeklyTimePct / 100, 1) - width / 2
+                            y: -2
+                            width: 2
+                            height: parent.height + 4
+                            color: Kirigami.Theme.textColor
+                            opacity: 0.6
+                        }
                     }
 
                     PlasmaComponents.Label {
@@ -815,6 +825,16 @@ PlasmoidItem {
                         color: Kirigami.Theme.backgroundColor
                         border.color: Kirigami.Theme.disabledTextColor
                         border.width: 1
+                        Rectangle {
+                            visible: root.useTimeAware && root.secondaryTimePct >= 0
+                            x: parent.width * Math.min(root.secondaryTimePct / 100, 1) - width / 2
+                            y: -2
+                            z: 1
+                            width: 2
+                            height: parent.height + 4
+                            color: Kirigami.Theme.textColor
+                            opacity: 0.6
+                        }
                         Rectangle {
                             width: parent.width * Math.min(root.secondaryUsagePercent / 100, 1)
                             height: parent.height

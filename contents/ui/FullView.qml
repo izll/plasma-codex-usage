@@ -205,7 +205,8 @@ Item {
                         Layout.alignment: Qt.AlignHCenter
                         Layout.preferredWidth: 56; Layout.preferredHeight: 56
                         percent: root.secondaryUsagePercent
-                        ringColor: root.getUsageColor(root.secondaryUsagePercent)
+                        ringColor: root.getUsageColor(root.secondaryUsagePercent, root.useTimeAware ? root.secondaryTimePct : undefined)
+                        markerRel: root.useTimeAware && root.secondaryTimePct >= 0 ? root.secondaryTimePct / 100 : -1
                         lineWidth: 5; showPercentSign: true; fontScale: 0.22
                     }
                     PlasmaComponents.Label {
