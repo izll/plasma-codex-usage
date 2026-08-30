@@ -57,6 +57,10 @@ cd plasma-codex-usage
 
 The Codex CLI writes a `rate_limits` snapshot into its session logs (`~/.codex/sessions/*.jsonl`) with every request. The widget tails the most recent logs and displays the latest snapshot — so the data is exactly what the CLI itself last saw, with zero extra API traffic. Account email and plan are read locally from `~/.codex/auth.json`.
 
+## Credits
+
+Based on [Claude Usage Widget](https://github.com/izll/plasma-claude-usage) and the work of its contributors.
+
 ## Related
 
 - [Claude Usage Widget](https://github.com/izll/plasma-claude-usage) — the same concept for Claude Code
