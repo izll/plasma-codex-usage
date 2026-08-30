@@ -17,6 +17,12 @@ QtObject {
 
     readonly property var strings: ({
         "en_US": {
+            "Colors": "Colors",
+            "Notifications": "Notifications",
+            "Refresh interval": "Refresh interval",
+            "Widget style": "Widget style",
+            "Update check:": "Update check:",
+            "Show weekly usage": "Show weekly usage",
             "Codex Usage": "Codex Usage",
             "Weekly (7day)": "Weekly (7day)",
             "Resets at:": "Resets at:",
@@ -127,6 +133,12 @@ QtObject {
             "Parse error": "Parse error"
         },
         "hu_HU": {
+            "Colors": "Színek",
+            "Notifications": "Értesítések",
+            "Refresh interval": "Frissítési gyakoriság",
+            "Widget style": "Widget stílus",
+            "Update check:": "Frissítés ellenőrzés:",
+            "Show weekly usage": "Heti használat megjelenítése",
             "Codex Usage": "Codex használat",
             "Weekly (7day)": "Heti (7 nap)",
             "Resets at:": "Visszaáll:",
@@ -237,6 +249,12 @@ QtObject {
             "Parse error": "Feldolgozási hiba"
         },
         "de_DE": {
+            "Colors": "Farben",
+            "Notifications": "Benachrichtigungen",
+            "Refresh interval": "Aktualisierungsintervall",
+            "Widget style": "Widget-Stil",
+            "Update check:": "Update-Prüfung:",
+            "Show weekly usage": "Wöchentliche Nutzung anzeigen",
             "Codex Usage": "Codex Nutzung",
             "Weekly (7day)": "Wöchentlich (7 Tage)",
             "Resets at:": "Setzt zurück um:",
@@ -347,6 +365,12 @@ QtObject {
             "Parse error": "Analysefehler"
         },
         "fr_FR": {
+            "Colors": "Couleurs",
+            "Notifications": "Notifications",
+            "Refresh interval": "Intervalle de rafraîchissement",
+            "Widget style": "Style du widget",
+            "Update check:": "Vérification des mises à jour :",
+            "Show weekly usage": "Afficher l'utilisation hebdomadaire",
             "Codex Usage": "Utilisation Codex",
             "Weekly (7day)": "Hebdomadaire (7j)",
             "Resets at:": "Réinitialisation à :",
@@ -457,6 +481,12 @@ QtObject {
             "Parse error": "Erreur d'analyse"
         },
         "es_ES": {
+            "Colors": "Colores",
+            "Notifications": "Notificaciones",
+            "Refresh interval": "Intervalo de actualización",
+            "Widget style": "Estilo del widget",
+            "Update check:": "Verificar actualizaciones:",
+            "Show weekly usage": "Mostrar uso semanal",
             "Codex Usage": "Uso de Codex",
             "Weekly (7day)": "Semanal (7 días)",
             "Resets at:": "Se reinicia a las:",
@@ -567,6 +597,12 @@ QtObject {
             "Parse error": "Error de análisis"
         },
         "it_IT": {
+            "Colors": "Colori",
+            "Notifications": "Notifiche",
+            "Refresh interval": "Intervallo di aggiornamento",
+            "Widget style": "Stile widget",
+            "Update check:": "Controllo aggiornamenti:",
+            "Show weekly usage": "Mostra utilizzo settimanale",
             "Codex Usage": "Utilizzo Codex",
             "Weekly (7day)": "Settimanale (7gg)",
             "Resets at:": "Si azzera alle:",
@@ -677,6 +713,12 @@ QtObject {
             "Parse error": "Errore di analisi"
         },
         "pt_BR": {
+            "Colors": "Cores",
+            "Notifications": "Notificações",
+            "Refresh interval": "Intervalo de atualização",
+            "Widget style": "Estilo do widget",
+            "Update check:": "Verificar atualizações:",
+            "Show weekly usage": "Mostrar uso semanal",
             "Codex Usage": "Uso do Codex",
             "Weekly (7day)": "Semanal (7 dias)",
             "Resets at:": "Reinicia às:",
@@ -787,6 +829,12 @@ QtObject {
             "Parse error": "Erro de análise"
         },
         "ru_RU": {
+            "Colors": "Цвета",
+            "Notifications": "Уведомления",
+            "Refresh interval": "Интервал обновления",
+            "Widget style": "Стиль виджета",
+            "Update check:": "Проверка обновлений:",
+            "Show weekly usage": "Показывать недельное использование",
             "Codex Usage": "Использование Codex",
             "Weekly (7day)": "Неделя (7 дней)",
             "Resets at:": "Сброс в:",
@@ -897,6 +945,12 @@ QtObject {
             "Parse error": "Ошибка разбора"
         },
         "pl_PL": {
+            "Colors": "Kolory",
+            "Notifications": "Powiadomienia",
+            "Refresh interval": "Częstotliwość odświeżania",
+            "Widget style": "Styl widżetu",
+            "Update check:": "Sprawdzanie aktualizacji:",
+            "Show weekly usage": "Pokaż tygodniowe użycie",
             "Codex Usage": "Użycie Codex",
             "Weekly (7day)": "Tygodniowo (7 dni)",
             "Resets at:": "Resetuje o:",
@@ -1007,6 +1061,12 @@ QtObject {
             "Parse error": "Błąd parsowania"
         },
         "nl_NL": {
+            "Colors": "Kleuren",
+            "Notifications": "Meldingen",
+            "Refresh interval": "Vernieuwingsinterval",
+            "Widget style": "Widgetstijl",
+            "Update check:": "Updatecontrole:",
+            "Show weekly usage": "Wekelijks gebruik tonen",
             "Codex Usage": "Codex Gebruik",
             "Weekly (7day)": "Wekelijks (7 dagen)",
             "Resets at:": "Reset om:",
@@ -1117,6 +1177,12 @@ QtObject {
             "Parse error": "Analysefout"
         },
         "tr_TR": {
+            "Colors": "Renkler",
+            "Notifications": "Bildirimler",
+            "Refresh interval": "Yenileme aralığı",
+            "Widget style": "Widget stili",
+            "Update check:": "Güncelleme kontrolü:",
+            "Show weekly usage": "Haftalık kullanımı göster",
             "Codex Usage": "Codex Kullanımı",
             "Weekly (7day)": "Haftalık (7 gün)",
             "Resets at:": "Sıfırlanma:",
@@ -1227,6 +1293,12 @@ QtObject {
             "Parse error": "Ayrıştırma hatası"
         },
         "ja_JP": {
+            "Colors": "色",
+            "Notifications": "通知",
+            "Refresh interval": "更新間隔",
+            "Widget style": "ウィジェットスタイル",
+            "Update check:": "更新チェック:",
+            "Show weekly usage": "週間使用量を表示",
             "Codex Usage": "Codex 使用状況",
             "Weekly (7day)": "週間 (7日)",
             "Resets at:": "リセット:",
@@ -1337,6 +1409,12 @@ QtObject {
             "Parse error": "解析エラー"
         },
         "ko_KR": {
+            "Colors": "색상",
+            "Notifications": "알림",
+            "Refresh interval": "새로고침 간격",
+            "Widget style": "위젯 스타일",
+            "Update check:": "업데이트 확인:",
+            "Show weekly usage": "주간 사용량 표시",
             "Codex Usage": "Codex 사용량",
             "Weekly (7day)": "주간 (7일)",
             "Resets at:": "초기화:",
@@ -1447,6 +1525,12 @@ QtObject {
             "Parse error": "구문 분석 오류"
         },
         "zh_CN": {
+            "Colors": "颜色",
+            "Notifications": "通知",
+            "Refresh interval": "刷新间隔",
+            "Widget style": "小部件样式",
+            "Update check:": "更新检查:",
+            "Show weekly usage": "显示每周使用量",
             "Codex Usage": "Codex 使用情况",
             "Weekly (7day)": "每周 (7天)",
             "Resets at:": "重置时间:",
@@ -1557,6 +1641,12 @@ QtObject {
             "Parse error": "解析错误"
         },
         "zh_TW": {
+            "Colors": "顏色",
+            "Notifications": "通知",
+            "Refresh interval": "重新整理間隔",
+            "Widget style": "小工具樣式",
+            "Update check:": "更新檢查:",
+            "Show weekly usage": "顯示每週使用量",
             "Codex Usage": "Codex 使用狀況",
             "Weekly (7day)": "每週 (7天)",
             "Resets at:": "重置時間:",
