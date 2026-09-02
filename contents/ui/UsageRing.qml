@@ -89,7 +89,7 @@ Item {
     Image {
         visible: ring.centerIcon !== ""
         anchors.centerIn: parent
-        width: (ring.arcRadius - ring.lineWidth) * 1.3
+        width: (ring.arcRadius - ring.lineWidth) * (ring.centerPercentOverlay ? 1.7 : 1.3)
         height: width
         source: ring.centerIcon
         sourceSize: Qt.size(width * 2, height * 2)
