@@ -30,6 +30,10 @@
             <label>Panel icon style (chatgpt or openai)</label>
             <default>chatgpt</default>
         </entry>
+        <entry name="ringCenter" type="String">
+            <label>Ring center content (percent or logo)</label>
+            <default>percent</default>
+        </entry>
         <entry name="panelStyle" type="String">
             <label>Panel display style (text, ring, or bar)</label>
             <default>ring</default>

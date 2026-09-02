@@ -18,6 +18,7 @@ Item {
     property color trackColor: Qt.alpha(Kirigami.Theme.textColor, 0.15)
     property bool showPercentSign: false
     property real fontScale: 0.3
+    property string centerIcon: ""
     property real markerRel: -1   // elapsed-time fraction 0..1 shown as a dot; < 0 hides it
 
     readonly property real arcRadius: Math.min(width, height) / 2 - lineWidth / 2
@@ -73,9 +74,22 @@ Item {
     }
 
     PlasmaComponents.Label {
+        visible: ring.centerIcon === ""
         anchors.centerIn: parent
         text: Math.round(ring.percent) + (ring.showPercentSign ? "%" : "")
         font.pixelSize: Math.max(8, ring.height * ring.fontScale)
         font.bold: true
+    }
+
+    // Optional provider logo instead of the percentage
+    Image {
+        visible: ring.centerIcon !== ""
+        anchors.centerIn: parent
+        width: (ring.arcRadius - ring.lineWidth) * 1.3
+        height: width
+        source: ring.centerIcon
+        sourceSize: Qt.size(width * 2, height * 2)
+        fillMode: Image.PreserveAspectFit
+        smooth: true
     }
 }

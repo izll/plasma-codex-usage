@@ -19,6 +19,7 @@ KCM.SimpleKCM {
     property bool cfg_showIcon
     property int cfg_iconSize
     property string cfg_panelIcon
+    property string cfg_ringCenter
     property string cfg_panelStyle
     property bool cfg_showWeekly
     property string cfg_quickLinks
@@ -195,6 +196,13 @@ KCM.SimpleKCM {
             model: ["ChatGPT", "OpenAI"]
             currentIndex: (cfg_panelIcon || "chatgpt") === "openai" ? 1 : 0
             onCurrentIndexChanged: cfg_panelIcon = currentIndex === 1 ? "openai" : "chatgpt"
+        }
+
+        QQC2.ComboBox {
+            Kirigami.FormData.label: tr("Ring center:")
+            model: [tr("Percent"), tr("Logo")]
+            currentIndex: (cfg_ringCenter || "percent") === "logo" ? 1 : 0
+            onCurrentIndexChanged: cfg_ringCenter = currentIndex === 1 ? "logo" : "percent"
         }
 
         RowLayout {
