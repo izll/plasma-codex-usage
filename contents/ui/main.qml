@@ -64,6 +64,7 @@ PlasmoidItem {
 
     // ── Trend history ──
     property var usageSamples: []
+    property bool cacheLoaded: false
 
     // ── Quick links ──
     property var parsedQuickLinks: []
@@ -141,6 +142,7 @@ PlasmoidItem {
         onNewData: function(sourceName, data) {
             var stdout = (data["stdout"] || "").trim()
             disconnectSource(sourceName)
+            if (sourceName.indexOf("codex-usage-cache") !== -1) root.cacheLoaded = true
             if (stdout.length > 10) {
                 try {
                     var cache = JSON.parse(stdout)
@@ -160,11 +162,19 @@ PlasmoidItem {
                         root.totalReasoningTokens = cache.totalReasoning || 0
                         root.lastInputTokens = cache.lastInput || 0
                         root.lastOutputTokens = cache.lastOutput || 0
-                        root.usageSamples = cache.samples || []
+                        var cachedSamples = cache.samples || []
+                        var mergedS = cachedSamples.concat(root.usageSamples)
+                        mergedS.sort(function(a, b) { return a.t - b.t })
+                        var dedupS = []
+                        for (var si = 0; si < mergedS.length; si++) {
+                            if (dedupS.length === 0 || mergedS[si].t > dedupS[dedupS.length - 1].t) dedupS.push(mergedS[si])
+                        }
+                        root.usageSamples = dedupS
                         root.lastSuccessTime = cache.timestamp
                         root.lastUpdate = Qt.formatTime(new Date(cache.timestamp), "hh:mm:ss") + " *"
                         root.isStale = age > root.staleThresholdMs
                         console.log("Codex Usage: Loaded cache, age:", Math.round(age / 60000), "min, stale:", root.isStale)
+                        root.cacheLoaded = true
                     } else {
                         console.log("Codex Usage: Cache too old, ignoring")
                     }
@@ -549,7 +559,7 @@ PlasmoidItem {
 
                 root.nowTick = Date.now()
                 checkAlerts()
-                saveCache()
+                if (root.cacheLoaded) saveCache()
 
                 console.log("Codex Usage: Data loaded - weekly:", root.weeklyUsagePercent, "plan:", root.planName)
             } catch (e) {
@@ -875,32 +885,14 @@ PlasmoidItem {
                     }
                 }
 
-                // Extra model quotas (e.g. GPT-Codex-Spark)
+                // Extra model quotas (e.g. Codex-Spark) — shown like Claude's per-model rows
                 Repeater {
                     model: root.extraQuotas
-                    delegate: RowLayout {
-                        Layout.fillWidth: true
-                        PlasmaComponents.Label {
-                            text: modelData.name
-                            font.bold: true
-                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                            elide: Text.ElideRight
-                            Layout.fillWidth: true
-                        }
-                        PlasmaComponents.Label {
-                            visible: modelData.primaryPct >= 0
-                            text: (modelData.primaryWindowMin >= 10080 ? "7d" : Math.round(modelData.primaryWindowMin / 60) + "h")
-                                  + " " + Math.round(modelData.primaryPct) + "%"
-                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                            color: root.getUsageColor(modelData.primaryPct)
-                        }
-                        PlasmaComponents.Label {
-                            visible: modelData.secondaryPct >= 0
-                            text: (modelData.secondaryWindowMin >= 10080 ? "7d" : Math.round(modelData.secondaryWindowMin / 60) + "h")
-                                  + " " + Math.round(modelData.secondaryPct) + "%"
-                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                            color: root.getUsageColor(modelData.secondaryPct)
-                        }
+                    delegate: ModelRow {
+                        required property var modelData
+                        label: modelData.name.replace(/^GPT-[0-9.]+-/, "")
+                        percent: modelData.secondaryPct >= 0 ? modelData.secondaryPct : Math.max(modelData.primaryPct, 0)
+                        barColor: "#10a37f"
                     }
                 }
             }

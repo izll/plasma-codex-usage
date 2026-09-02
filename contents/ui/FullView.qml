@@ -231,41 +231,34 @@ Item {
             }
             }
 
-            // Extra model quotas (e.g. GPT-Codex-Spark)
-            Repeater {
-                model: root.extraQuotas
-                delegate: Rectangle {
-                    Layout.fillWidth: true
-                    radius: Kirigami.Units.cornerRadius
-                    color: full.cardColor
-                    implicitHeight: exRow.implicitHeight + Kirigami.Units.mediumSpacing * 2
+            // Extra model quotas (e.g. Codex-Spark) — shown like Claude's per-model card
+            Rectangle {
+                visible: root.extraQuotas.length > 0
+                Layout.fillWidth: true
+                radius: Kirigami.Units.cornerRadius
+                color: full.cardColor
+                implicitHeight: exCol.implicitHeight + Kirigami.Units.mediumSpacing * 2
 
-                    RowLayout {
-                        id: exRow
-                        anchors.fill: parent
-                        anchors.margins: Kirigami.Units.mediumSpacing
-                        spacing: Kirigami.Units.mediumSpacing
+                ColumnLayout {
+                    id: exCol
+                    anchors.fill: parent
+                    anchors.margins: Kirigami.Units.mediumSpacing
+                    spacing: Kirigami.Units.smallSpacing
 
-                        PlasmaComponents.Label {
-                            text: modelData.name
-                            font.bold: true
-                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                            elide: Text.ElideRight
-                            Layout.fillWidth: true
-                        }
-                        PlasmaComponents.Label {
-                            visible: modelData.primaryPct >= 0
-                            text: (modelData.primaryWindowMin >= 10080 ? "7d" : Math.round(modelData.primaryWindowMin / 60) + "h")
-                                  + " " + Math.round(modelData.primaryPct) + "%"
-                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                            color: root.getUsageColor(modelData.primaryPct)
-                        }
-                        PlasmaComponents.Label {
-                            visible: modelData.secondaryPct >= 0
-                            text: (modelData.secondaryWindowMin >= 10080 ? "7d" : Math.round(modelData.secondaryWindowMin / 60) + "h")
-                                  + " " + Math.round(modelData.secondaryPct) + "%"
-                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-                            color: root.getUsageColor(modelData.secondaryPct)
+                    PlasmaComponents.Label {
+                        font.pixelSize: Kirigami.Theme.smallFont.pixelSize - 1
+                        font.capitalization: Font.AllUppercase
+                        font.letterSpacing: 1.2; font.bold: true; opacity: 0.55
+                        text: i18n.tr("By Model (Weekly)")
+                    }
+
+                    Repeater {
+                        model: root.extraQuotas
+                        delegate: ModelRow {
+                            required property var modelData
+                            label: modelData.name.replace(/^GPT-[0-9.]+-/, "")
+                            percent: modelData.secondaryPct >= 0 ? modelData.secondaryPct : Math.max(modelData.primaryPct, 0)
+                            barColor: "#10a37f"
                         }
                     }
                 }
