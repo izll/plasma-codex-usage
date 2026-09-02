@@ -20,6 +20,7 @@ KCM.SimpleKCM {
     property int cfg_iconSize
     property string cfg_panelIcon
     property string cfg_ringCenter
+    property int cfg_panelMargin
     property string cfg_panelStyle
     property bool cfg_showWeekly
     property string cfg_quickLinks
@@ -196,6 +197,18 @@ KCM.SimpleKCM {
             model: ["ChatGPT", "OpenAI"]
             currentIndex: (cfg_panelIcon || "chatgpt") === "openai" ? 1 : 0
             onCurrentIndexChanged: cfg_panelIcon = currentIndex === 1 ? "openai" : "chatgpt"
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: tr("Panel margin:")
+            QQC2.SpinBox {
+                from: 0
+                to: 32
+                value: cfg_panelMargin
+                onValueChanged: cfg_panelMargin = value
+                textFromValue: function(value) { return value + "px" }
+                valueFromText: function(text) { return parseInt(text) || 0 }
+            }
         }
 
         QQC2.ComboBox {

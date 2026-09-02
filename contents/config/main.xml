@@ -22,6 +22,10 @@
             <label>Show Codex icon in panel</label>
             <default>true</default>
         </entry>
+        <entry name="panelMargin" type="Int">
+            <label>Horizontal panel margin in pixels</label>
+            <default>4</default>
+        </entry>
         <entry name="iconSize" type="Int">
             <label>Panel icon size</label>
             <default>0</default>
