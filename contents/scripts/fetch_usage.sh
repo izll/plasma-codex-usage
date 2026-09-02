@@ -20,9 +20,17 @@ if [ -z "$FILES" ]; then
     exit 0
 fi
 
-# Search for the last rate_limits line in each file (newest first)
+# Search for the last ACCOUNT rate_limits line in each file (newest first).
+# Newer Codex CLIs log several limit types (e.g. limit_id "codex_bengalfox"
+# for the separate GPT-Codex-Spark quota) — only limit_id "codex" is the
+# account limit. Older CLIs have no limit_id at all.
 for f in $FILES; do
-    LINE=$(tail -c 262144 "$f" 2>/dev/null | grep '"rate_limits"' | tail -1)
+    CAND=$(tail -c 262144 "$f" 2>/dev/null | grep '"rate_limits"')
+    [ -n "$CAND" ] || continue
+    LINE=$(printf '%s\n' "$CAND" | grep '"limit_id"[[:space:]]*:[[:space:]]*"codex"' | tail -1)
+    if [ -z "$LINE" ]; then
+        LINE=$(printf '%s\n' "$CAND" | grep -v '"limit_id"' | tail -1)
+    fi
     if [ -n "$LINE" ]; then
         echo "$LINE"
         exit 0
