@@ -193,7 +193,7 @@ KCM.SimpleKCM {
 
         QQC2.ComboBox {
             Kirigami.FormData.label: tr("Panel icon:")
-            enabled: cfg_showIcon || (cfg_ringCenter || "percent") === "logo"
+            enabled: cfg_showIcon || (cfg_ringCenter || "percent").indexOf("logo") === 0
             model: ["ChatGPT", "OpenAI"]
             currentIndex: (cfg_panelIcon || "chatgpt") === "openai" ? 1 : 0
             onCurrentIndexChanged: cfg_panelIcon = currentIndex === 1 ? "openai" : "chatgpt"
