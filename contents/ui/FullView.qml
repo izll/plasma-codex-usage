@@ -144,7 +144,11 @@ Item {
 
     Component {
         id: cardUsageComp
-        RowLayout {
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: Kirigami.Units.mediumSpacing
+
+            RowLayout {
             Layout.fillWidth: true
             spacing: Kirigami.Units.mediumSpacing
 
@@ -222,6 +226,47 @@ Item {
                         text: i18n.tr("resets in") + " " + root.formatTimeRemaining(root.secondaryResetTime)
                         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                         opacity: 0.65; elide: Text.ElideRight
+                    }
+                }
+            }
+            }
+
+            // Extra model quotas (e.g. GPT-Codex-Spark)
+            Repeater {
+                model: root.extraQuotas
+                delegate: Rectangle {
+                    Layout.fillWidth: true
+                    radius: Kirigami.Units.cornerRadius
+                    color: full.cardColor
+                    implicitHeight: exRow.implicitHeight + Kirigami.Units.mediumSpacing * 2
+
+                    RowLayout {
+                        id: exRow
+                        anchors.fill: parent
+                        anchors.margins: Kirigami.Units.mediumSpacing
+                        spacing: Kirigami.Units.mediumSpacing
+
+                        PlasmaComponents.Label {
+                            text: modelData.name
+                            font.bold: true
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                        }
+                        PlasmaComponents.Label {
+                            visible: modelData.primaryPct >= 0
+                            text: (modelData.primaryWindowMin >= 10080 ? "7d" : Math.round(modelData.primaryWindowMin / 60) + "h")
+                                  + " " + Math.round(modelData.primaryPct) + "%"
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            color: root.getUsageColor(modelData.primaryPct)
+                        }
+                        PlasmaComponents.Label {
+                            visible: modelData.secondaryPct >= 0
+                            text: (modelData.secondaryWindowMin >= 10080 ? "7d" : Math.round(modelData.secondaryWindowMin / 60) + "h")
+                                  + " " + Math.round(modelData.secondaryPct) + "%"
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            color: root.getUsageColor(modelData.secondaryPct)
+                        }
                     }
                 }
             }

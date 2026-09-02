@@ -20,21 +20,33 @@ if [ -z "$FILES" ]; then
     exit 0
 fi
 
-# Search for the last ACCOUNT rate_limits line in each file (newest first).
-# Newer Codex CLIs log several limit types (e.g. limit_id "codex_bengalfox"
-# for the separate GPT-Codex-Spark quota) — only limit_id "codex" is the
-# account limit. Older CLIs have no limit_id at all.
-for f in $FILES; do
-    CAND=$(tail -c 262144 "$f" 2>/dev/null | grep '"rate_limits"')
-    [ -n "$CAND" ] || continue
-    LINE=$(printf '%s\n' "$CAND" | grep '"limit_id"[[:space:]]*:[[:space:]]*"codex"' | tail -1)
-    if [ -z "$LINE" ]; then
-        LINE=$(printf '%s\n' "$CAND" | grep -v '"limit_id"' | tail -1)
-    fi
-    if [ -n "$LINE" ]; then
-        echo "$LINE"
-        exit 0
-    fi
-done
+# Newer Codex CLIs log several limit types (limit_id "codex" is the account
+# limit; others, e.g. "codex_bengalfox", are separate model quotas like
+# GPT-Codex-Spark). Emit the newest line PER limit_id, account limit first.
+# Legacy lines without limit_id count as the account limit.
+OUT=$(for f in $FILES; do
+    tail -c 262144 "$f" 2>/dev/null | grep '"rate_limits"' | tac
+done | awk '
+{
+    id = "codex"
+    if (match($0, /"limit_id"[[:space:]]*:[[:space:]]*"[^"]*"/)) {
+        id = substr($0, RSTART, RLENGTH)
+        sub(/^"limit_id"[[:space:]]*:[[:space:]]*"/, "", id)
+        sub(/"$/, "", id)
+    }
+    if (!(id in seen)) {
+        seen[id] = $0
+        order[n++] = id
+    }
+}
+END {
+    if ("codex" in seen) print seen["codex"]
+    for (i = 0; i < n; i++) if (order[i] != "codex") print seen[order[i]]
+}')
+
+if [ -n "$OUT" ]; then
+    printf '%s\n' "$OUT"
+    exit 0
+fi
 
 echo "NODATA"

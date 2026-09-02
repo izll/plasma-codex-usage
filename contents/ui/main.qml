@@ -26,6 +26,9 @@ PlasmoidItem {
     property int secondaryWindowMinutes: 0
     property bool hasSecondary: false
 
+    // Extra model quotas (e.g. GPT-Codex-Spark) — [{name, primaryPct, primaryWindowMin, secondaryPct, secondaryWindowMin}]
+    property var extraQuotas: []
+
     // ── Account ──
     property string planName: ""
     property string accountEmail: ""
@@ -453,7 +456,28 @@ PlasmoidItem {
             }
 
             try {
-                var entry = JSON.parse(stdout)
+                // The fetch script emits one line per limit type: the account
+                // limit first, then any extra model quotas (e.g. Codex-Spark).
+                var lines = stdout.split("\n").filter(function(l) { return l.trim().length > 2 })
+                var extras = []
+                for (var li = 1; li < lines.length; li++) {
+                    try {
+                        var xEntry = JSON.parse(lines[li])
+                        var xrl = (xEntry.payload || xEntry).rate_limits || {}
+                        var xp = xrl.primary || {}
+                        var xs = xrl.secondary || {}
+                        extras.push({
+                            name: xrl.limit_name || xrl.limit_id || "?",
+                            primaryPct: xp.used_percent !== undefined ? xp.used_percent : -1,
+                            primaryWindowMin: xp.window_minutes || 0,
+                            secondaryPct: xs.used_percent !== undefined ? xs.used_percent : -1,
+                            secondaryWindowMin: xs.window_minutes || 0
+                        })
+                    } catch (xe) { }
+                }
+                root.extraQuotas = extras
+
+                var entry = JSON.parse(lines[0])
                 var payload = entry.payload || entry
                 var rateLimits = payload.rate_limits || {}
                 var info = payload.info || {}
@@ -848,6 +872,35 @@ PlasmoidItem {
                         text: i18n.tr("Resets:") + " " + (root.secondaryResetTime ? Qt.formatDateTime(root.secondaryResetTime, "MMM d, hh:mm") : "") + (root.secondaryResetTime ? " (" + formatTimeRemaining(root.secondaryResetTime) + ")" : "")
                         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                         color: Kirigami.Theme.disabledTextColor
+                    }
+                }
+
+                // Extra model quotas (e.g. GPT-Codex-Spark)
+                Repeater {
+                    model: root.extraQuotas
+                    delegate: RowLayout {
+                        Layout.fillWidth: true
+                        PlasmaComponents.Label {
+                            text: modelData.name
+                            font.bold: true
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            elide: Text.ElideRight
+                            Layout.fillWidth: true
+                        }
+                        PlasmaComponents.Label {
+                            visible: modelData.primaryPct >= 0
+                            text: (modelData.primaryWindowMin >= 10080 ? "7d" : Math.round(modelData.primaryWindowMin / 60) + "h")
+                                  + " " + Math.round(modelData.primaryPct) + "%"
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            color: root.getUsageColor(modelData.primaryPct)
+                        }
+                        PlasmaComponents.Label {
+                            visible: modelData.secondaryPct >= 0
+                            text: (modelData.secondaryWindowMin >= 10080 ? "7d" : Math.round(modelData.secondaryWindowMin / 60) + "h")
+                                  + " " + Math.round(modelData.secondaryPct) + "%"
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            color: root.getUsageColor(modelData.secondaryPct)
+                        }
                     }
                 }
             }
