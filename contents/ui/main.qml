@@ -747,12 +747,18 @@ PlasmoidItem {
             ? (cardLoader.item ? cardLoader.item.Layout.preferredHeight : Kirigami.Units.gridUnit * 20)
             : classicColumn.implicitHeight + Kirigami.Units.largeSpacing * 2
 
-        Layout.minimumWidth: root.useCardPopup
+        // Right after a style switch, pin the minimum to the target as well
+        // as the maximum below. An existing popup is restored at its remembered
+        // size constrained into [minimum, maximum]; preferredWidth applies only
+        // when the popup is first created, so after a switch lowering the
+        // maximum alone can never grow it back. Ordinary content changes keep
+        // the max-only clamp so a manually resized popup is left alone.
+        Layout.minimumWidth: styleSwitchPin.running ? targetWidth : (root.useCardPopup
             ? (cardLoader.item ? cardLoader.item.Layout.minimumWidth : Kirigami.Units.gridUnit * 16)
-            : Kirigami.Units.gridUnit * 14
-        Layout.minimumHeight: root.useCardPopup
+            : Kirigami.Units.gridUnit * 14)
+        Layout.minimumHeight: styleSwitchPin.running ? targetHeight : (root.useCardPopup
             ? (cardLoader.item ? cardLoader.item.Layout.minimumHeight : Kirigami.Units.gridUnit * 16)
-            : fullRepItem.classicScrollable ? Kirigami.Units.gridUnit * 4 : Math.min(classicColumn.implicitHeight + Kirigami.Units.largeSpacing * 2, Kirigami.Units.gridUnit * 24)
+            : fullRepItem.classicScrollable ? Kirigami.Units.gridUnit * 4 : Math.min(classicColumn.implicitHeight + Kirigami.Units.largeSpacing * 2, Kirigami.Units.gridUnit * 24))
         Layout.preferredWidth: targetWidth
         Layout.preferredHeight: targetHeight
         Layout.maximumWidth: resizeForcer.running ? targetWidth : -1
@@ -764,6 +770,18 @@ PlasmoidItem {
         Timer {
             id: resizeForcer
             interval: 150
+        }
+
+        Timer {
+            id: styleSwitchPin
+            interval: 150
+        }
+        Connections {
+            target: root
+            function onUseCardPopupChanged() {
+                styleSwitchPin.restart()
+                resizeForcer.restart()
+            }
         }
 
         Loader {

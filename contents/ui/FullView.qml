@@ -701,14 +701,17 @@ Item {
                         }
                     }
 
+                    // fillWidth + minimumWidth 0 so the status text can actually
+                    // elide. Without it the row's minimum width grows with the
+                    // text ("Updated 3m ago · Next update in 2m") and pushes the
+                    // whole card column past the popup edge, where clip cuts it off.
                     PlasmaComponents.Label {
                         text: full.statusText
                         font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                         opacity: 0.65; elide: Text.ElideRight
-                        Layout.fillWidth: false
+                        Layout.fillWidth: true
+                        Layout.minimumWidth: 0
                     }
-
-                    Item { Layout.fillWidth: true }
 
                     PlasmaComponents.ToolButton {
                         icon.name: "view-refresh"

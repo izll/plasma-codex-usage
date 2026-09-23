@@ -260,15 +260,6 @@ KCM.SimpleKCM {
             onCurrentIndexChanged: cfg_popupStyle = currentIndex === 0 ? "classic" : "card"
         }
 
-        QQC2.Label {
-            text: tr("You may need to resize the widget after switching styles")
-            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
-            color: Kirigami.Theme.disabledTextColor
-            font.italic: true
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-        }
-
         // --- Scrollable content ---
 
         QQC2.CheckBox {
