@@ -34,6 +34,14 @@
             <label>Panel icon style (chatgpt or openai)</label>
             <default>chatgpt</default>
         </entry>
+        <entry name="metricsScale" type="Int">
+            <label>Metrics size as a percentage (100 = default)</label>
+            <default>100</default>
+        </entry>
+        <entry name="showWindowLabels" type="Bool">
+            <label>Show the window label (7d/5h) on the panel ring</label>
+            <default>false</default>
+        </entry>
         <entry name="ringCenter" type="String">
             <label>Ring center content (percent or logo)</label>
             <default>percent</default>

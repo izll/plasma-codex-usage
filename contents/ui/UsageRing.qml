@@ -20,6 +20,7 @@ Item {
     property real fontScale: 0.3
     property string centerIcon: ""
     property bool centerPercentOverlay: false
+    property string cornerLabel: ""
     property real markerRel: -1   // elapsed-time fraction 0..1 shown as a dot; < 0 hides it
 
     readonly property real arcRadius: Math.min(width, height) / 2 - lineWidth / 2
@@ -96,5 +97,21 @@ Item {
         fillMode: Image.PreserveAspectFit
         smooth: true
         opacity: ring.centerPercentOverlay ? 0.55 : 1.0
+    }
+
+    // Small window label (e.g. "5h" / "7d") in the bottom-right corner
+    PlasmaComponents.Label {
+        visible: ring.cornerLabel !== ""
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: -1
+        anchors.bottomMargin: -1
+        z: 2
+        text: ring.cornerLabel
+        font.pixelSize: Math.max(7, ring.height * 0.26)
+        font.bold: true
+        style: Text.Outline
+        styleColor: Kirigami.Theme.backgroundColor
+        opacity: 0.85
     }
 }

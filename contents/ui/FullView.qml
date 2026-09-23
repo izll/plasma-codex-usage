@@ -167,12 +167,12 @@ Item {
 
                     UsageRing {
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredWidth: root.hasSecondary ? 56 : 72
-                        Layout.preferredHeight: root.hasSecondary ? 56 : 72
+                        Layout.preferredWidth: Math.round((root.hasSecondary ? 56 : 72) * root.metricsScale)
+                        Layout.preferredHeight: Math.round((root.hasSecondary ? 56 : 72) * root.metricsScale)
                         percent: root.weeklyUsagePercent
                         ringColor: root.getUsageColor(root.weeklyUsagePercent, root.useTimeAware ? root.weeklyTimePct : undefined)
                         markerRel: root.useTimeAware && root.weeklyTimePct >= 0 ? root.weeklyTimePct / 100 : -1
-                        lineWidth: root.hasSecondary ? 5 : 6; showPercentSign: true; fontScale: 0.22
+                        lineWidth: Math.round((root.hasSecondary ? 5 : 6) * (1 + (root.metricsScale - 1) * 0.5)); showPercentSign: true; fontScale: 0.22
                     }
                     PlasmaComponents.Label {
                         Layout.alignment: Qt.AlignHCenter
@@ -207,11 +207,11 @@ Item {
 
                     UsageRing {
                         Layout.alignment: Qt.AlignHCenter
-                        Layout.preferredWidth: 56; Layout.preferredHeight: 56
+                        Layout.preferredWidth: Math.round(56 * root.metricsScale); Layout.preferredHeight: Math.round(56 * root.metricsScale)
                         percent: root.secondaryUsagePercent
                         ringColor: root.getUsageColor(root.secondaryUsagePercent, root.useTimeAware ? root.secondaryTimePct : undefined)
                         markerRel: root.useTimeAware && root.secondaryTimePct >= 0 ? root.secondaryTimePct / 100 : -1
-                        lineWidth: 5; showPercentSign: true; fontScale: 0.22
+                        lineWidth: Math.round(5 * (1 + (root.metricsScale - 1) * 0.5)); showPercentSign: true; fontScale: 0.22
                     }
                     PlasmaComponents.Label {
                         Layout.alignment: Qt.AlignHCenter

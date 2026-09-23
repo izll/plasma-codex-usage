@@ -27,14 +27,14 @@ RowLayout {
 
     Rectangle {
         Layout.fillWidth: true
-        Layout.preferredHeight: 6
-        radius: 3
+        Layout.preferredHeight: Math.round(6 * root.metricsScale)
+        radius: height / 2
         color: Qt.alpha(Kirigami.Theme.textColor, 0.15)
 
         Rectangle {
             width: parent.width * Math.min(row.percent / 100, 1)
             height: parent.height
-            radius: 3
+            radius: parent.radius
             color: row.barColor
         }
     }

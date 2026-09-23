@@ -20,6 +20,8 @@ KCM.SimpleKCM {
     property int cfg_iconSize
     property string cfg_panelIcon
     property string cfg_ringCenter
+    property int cfg_metricsScale
+    property bool cfg_showWindowLabels
     property int cfg_panelMargin
     property string cfg_panelStyle
     property bool cfg_showWeekly
@@ -209,6 +211,31 @@ KCM.SimpleKCM {
                 textFromValue: function(value) { return value + "px" }
                 valueFromText: function(text) { return parseInt(text) || 0 }
             }
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: tr("Metrics size (panel and popup):")
+            QQC2.Slider {
+                from: 100
+                to: 300
+                stepSize: 10
+                snapMode: QQC2.Slider.SnapAlways
+                value: cfg_metricsScale
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 10
+                // onValueChanged, not onMoved: wheel/keyboard changes must mark the page dirty too
+                onValueChanged: if (cfg_metricsScale !== value) cfg_metricsScale = value
+            }
+            QQC2.Label {
+                text: Math.round(cfg_metricsScale) + "%"
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 3
+            }
+        }
+
+        QQC2.CheckBox {
+            Kirigami.FormData.label: tr("Window labels:")
+            text: tr("Show 5h/7d on rings")
+            checked: cfg_showWindowLabels
+            onCheckedChanged: cfg_showWindowLabels = checked
         }
 
         QQC2.ComboBox {

@@ -96,6 +96,14 @@ PlasmoidItem {
         return s === "circular" ? "ring" : s
     }
     readonly property bool useTimeAware: Plasmoid.configuration.useTimeAwareColors !== false
+    readonly property real metricsScale: Math.max(100, Math.min(Plasmoid.configuration.metricsScale || 100, 300)) / 100
+    readonly property int classicBarHeight: Math.round(10 * metricsScale)
+    // "7d" / "5h" style label for a rate-limit window, for the panel ring's corner
+    function windowLabel(minutes) {
+        if (!minutes) return ""
+        if (minutes % 1440 === 0) return (minutes / 1440) + "d"
+        return Math.round(minutes / 60) + "h"
+    }
 
     // ── Background ──
     readonly property bool isOnPanel: Plasmoid.location === PlasmaCore.Types.TopEdge
@@ -820,8 +828,8 @@ PlasmoidItem {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        height: 10
-                        radius: 5
+                        height: root.classicBarHeight
+                        radius: height / 2
                         color: Kirigami.Theme.backgroundColor
                         border.color: Kirigami.Theme.disabledTextColor
                         border.width: 1
@@ -834,9 +842,9 @@ PlasmoidItem {
                         Rectangle {
                             visible: root.useTimeAware && root.weeklyTimePct >= 0
                             x: parent.width * Math.min(root.weeklyTimePct / 100, 1) - width / 2
-                            y: -2
-                            width: 2
-                            height: parent.height + 4
+                            y: -Math.round(2 * root.metricsScale)
+                            width: Math.max(2, Math.round(2 * root.metricsScale))
+                            height: parent.height + Math.round(4 * root.metricsScale)
                             color: Kirigami.Theme.textColor
                             opacity: 0.6
                         }
@@ -872,8 +880,8 @@ PlasmoidItem {
 
                     Rectangle {
                         Layout.fillWidth: true
-                        height: 10
-                        radius: 5
+                        height: root.classicBarHeight
+                        radius: height / 2
                         color: Kirigami.Theme.backgroundColor
                         border.color: Kirigami.Theme.disabledTextColor
                         border.width: 1

@@ -17,6 +17,9 @@ QtObject {
 
     readonly property var strings: ({
         "en_US": {
+            "Metrics size (panel and popup):": "Metrics size (panel and popup):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Colors",
             "Notifications": "Notifications",
             "Refresh interval": "Refresh interval",
@@ -138,6 +141,9 @@ QtObject {
             "Parse error": "Parse error"
         },
         "hu_HU": {
+            "Metrics size (panel and popup):": "Mérőszám méret (panel és felugró):",
+            "Window labels:": "Ablak feliratok:",
+            "Show 5h/7d on rings": "5h/7d a gyűrűkön",
             "Colors": "Színek",
             "Notifications": "Értesítések",
             "Refresh interval": "Frissítési gyakoriság",
@@ -259,6 +265,9 @@ QtObject {
             "Parse error": "Feldolgozási hiba"
         },
         "de_DE": {
+            "Metrics size (panel and popup):": "Metrikgröße (Leiste und Popup):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Farben",
             "Notifications": "Benachrichtigungen",
             "Refresh interval": "Aktualisierungsintervall",
@@ -374,6 +383,9 @@ QtObject {
             "Parse error": "Analysefehler"
         },
         "fr_FR": {
+            "Metrics size (panel and popup):": "Taille des métriques (panneau et fenêtre):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Couleurs",
             "Notifications": "Notifications",
             "Refresh interval": "Intervalle de rafraîchissement",
@@ -489,6 +501,9 @@ QtObject {
             "Parse error": "Erreur d'analyse"
         },
         "es_ES": {
+            "Metrics size (panel and popup):": "Tamaño de las métricas (panel y ventana):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Colores",
             "Notifications": "Notificaciones",
             "Refresh interval": "Intervalo de actualización",
@@ -604,6 +619,9 @@ QtObject {
             "Parse error": "Error de análisis"
         },
         "it_IT": {
+            "Metrics size (panel and popup):": "Dimensione metriche (pannello e popup):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Colori",
             "Notifications": "Notifiche",
             "Refresh interval": "Intervallo di aggiornamento",
@@ -719,6 +737,9 @@ QtObject {
             "Parse error": "Errore di analisi"
         },
         "pt_BR": {
+            "Metrics size (panel and popup):": "Tamanho das métricas (painel e popup):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Cores",
             "Notifications": "Notificações",
             "Refresh interval": "Intervalo de atualização",
@@ -834,6 +855,9 @@ QtObject {
             "Parse error": "Erro de análise"
         },
         "ru_RU": {
+            "Metrics size (panel and popup):": "Размер метрик (панель и окно):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Цвета",
             "Notifications": "Уведомления",
             "Refresh interval": "Интервал обновления",
@@ -949,6 +973,9 @@ QtObject {
             "Parse error": "Ошибка разбора"
         },
         "pl_PL": {
+            "Metrics size (panel and popup):": "Rozmiar wskaźników (panel i okno):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Kolory",
             "Notifications": "Powiadomienia",
             "Refresh interval": "Częstotliwość odświeżania",
@@ -1064,6 +1091,9 @@ QtObject {
             "Parse error": "Błąd parsowania"
         },
         "nl_NL": {
+            "Metrics size (panel and popup):": "Metriekgrootte (paneel en pop-up):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Kleuren",
             "Notifications": "Meldingen",
             "Refresh interval": "Vernieuwingsinterval",
@@ -1179,6 +1209,9 @@ QtObject {
             "Parse error": "Analysefout"
         },
         "tr_TR": {
+            "Metrics size (panel and popup):": "Ölçüm boyutu (panel ve açılır pencere):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Renkler",
             "Notifications": "Bildirimler",
             "Refresh interval": "Yenileme aralığı",
@@ -1294,6 +1327,9 @@ QtObject {
             "Parse error": "Ayrıştırma hatası"
         },
         "ja_JP": {
+            "Metrics size (panel and popup):": "メトリクスサイズ (パネルとポップアップ):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "色",
             "Notifications": "通知",
             "Refresh interval": "更新間隔",
@@ -1409,6 +1445,9 @@ QtObject {
             "Parse error": "解析エラー"
         },
         "ko_KR": {
+            "Metrics size (panel and popup):": "지표 크기 (패널 및 팝업):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "색상",
             "Notifications": "알림",
             "Refresh interval": "새로고침 간격",
@@ -1524,6 +1563,9 @@ QtObject {
             "Parse error": "구문 분석 오류"
         },
         "zh_CN": {
+            "Metrics size (panel and popup):": "指标大小 (面板和弹窗):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "颜色",
             "Notifications": "通知",
             "Refresh interval": "刷新间隔",
@@ -1639,6 +1681,9 @@ QtObject {
             "Parse error": "解析错误"
         },
         "zh_TW": {
+            "Metrics size (panel and popup):": "指標大小 (面板和彈出視窗):",
+            "Window labels:": "Window labels:",
+            "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "顏色",
             "Notifications": "通知",
             "Refresh interval": "重新整理間隔",
