@@ -34,9 +34,22 @@ done | awk '
         sub(/^"limit_id"[[:space:]]*:[[:space:]]*"/, "", id)
         sub(/"$/, "", id)
     }
+    # Pick the newest snapshot per limit by its own timestamp, not by file
+    # order: resuming an old session touches its file before it logs a new
+    # snapshot, so a recently modified file can still hold a weeks-old value.
+    ts = ""
+    if (match($0, /"timestamp"[[:space:]]*:[[:space:]]*"[^"]*"/)) {
+        ts = substr($0, RSTART, RLENGTH)
+        sub(/^"timestamp"[[:space:]]*:[[:space:]]*"/, "", ts)
+        sub(/"$/, "", ts)
+    }
     if (!(id in seen)) {
-        seen[id] = $0
         order[n++] = id
+        seen[id] = $0
+        best[id] = ts
+    } else if (ts > best[id]) {
+        seen[id] = $0
+        best[id] = ts
     }
 }
 END {
