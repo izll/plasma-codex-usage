@@ -31,6 +31,10 @@ Item {
     readonly property int ringLineWidth: Math.max(2, Math.round(3 + (compact.ringSize - 28) * 0.06))
     readonly property real ringFontScale: Math.min(0.36, 0.3 + (root.metricsScale - 1) * 0.04)
     readonly property int barWidth: Math.round(32 * root.metricsScale)
+    // In a vertical layout the widget's height follows usageRow's implicit
+    // height, so a bar sized to its parent's height would feed back into it
+    // and never settle (plasmashell hangs). Give it its own height there.
+    readonly property int barHeight: fitted(Math.round(Kirigami.Units.iconSizes.medium * root.metricsScale))
     readonly property int barFontSize: compact.availableHeight < 0
         ? Math.round(9 * root.metricsScale)
         : Math.min(Math.round(9 * root.metricsScale), Math.round(compact.availableHeight * 0.5))
@@ -130,7 +134,7 @@ Item {
         Item {
             visible: root.showUsageStats && compact.effectivePanelStyle === "bar" && (Plasmoid.configuration.showWeekly !== false) && root.metricsVisible
             Layout.preferredWidth: compact.barWidth
-            Layout.preferredHeight: parent.height
+            Layout.preferredHeight: root.isVerticalLayout ? compact.barHeight : parent.height
             opacity: root.hasNetworkError ? 0.5 : 1.0
 
             Rectangle {
