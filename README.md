@@ -16,6 +16,8 @@ A KDE Plasma 6 widget that displays your OpenAI Codex CLI usage statistics in th
   - Account info (email + plan from `auth.json`), usage ring, token stats (input/output/cached/reasoning), 7-day trend chart, quick links
 - **Classic Popup**: Traditional layout with progress bars (switchable in settings)
 - **Panel Styles**: Icon with usage badge, rings, or text — with a choice of ChatGPT or OpenAI icon
+- **Panel Customization**: Metrics size (100–300%), ring center (percent, OpenAI logo, or logo + percent) with adjustable logo size, window label, panel margin and icon size
+- **Tabbed Settings**: General, Panel and Popup tabs
 - **Desktop Notifications**: Alerts when usage crosses thresholds
 - **Update Checker**: Dot on the panel icon when a new Codex CLI version is available
 - **Process Visibility**: Hide widget or usage when Codex is not running
