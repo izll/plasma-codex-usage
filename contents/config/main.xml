@@ -46,6 +46,10 @@
             <label>Ring center content (percent or logo)</label>
             <default>percent</default>
         </entry>
+        <entry name="ringLogoSize" type="Int">
+            <label>Logo size inside the ring, as a percentage of its inner diameter</label>
+            <default>85</default>
+        </entry>
         <entry name="panelStyle" type="String">
             <label>Panel display style (text, ring, or bar)</label>
             <default>ring</default>

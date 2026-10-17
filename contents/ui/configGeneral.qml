@@ -20,6 +20,7 @@ KCM.SimpleKCM {
     property int cfg_iconSize
     property string cfg_panelIcon
     property string cfg_ringCenter
+    property int cfg_ringLogoSize
     property int cfg_metricsScale
     property bool cfg_showWindowLabels
     property int cfg_panelMargin
@@ -246,17 +247,39 @@ KCM.SimpleKCM {
         }
 
         RowLayout {
+            Kirigami.FormData.label: tr("Ring logo size:")
+            enabled: (cfg_ringCenter || "percent").indexOf("logo") === 0
+            QQC2.Slider {
+                from: 50
+                to: 100
+                stepSize: 5
+                snapMode: QQC2.Slider.SnapAlways
+                value: cfg_ringLogoSize
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 10
+                onValueChanged: if (cfg_ringLogoSize !== value) cfg_ringLogoSize = value
+            }
+            QQC2.Label {
+                text: Math.round(cfg_ringLogoSize) + "%"
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 3
+            }
+        }
+
+        RowLayout {
             Kirigami.FormData.label: tr("Icon size:")
             enabled: cfg_showIcon
 
-            QQC2.SpinBox {
+            QQC2.Slider {
                 from: 0
                 to: 64
                 stepSize: 2
+                snapMode: QQC2.Slider.SnapAlways
                 value: cfg_iconSize
-                onValueChanged: cfg_iconSize = value
-                textFromValue: function(value) { return value === 0 ? tr("Auto") : value + "px" }
-                valueFromText: function(text) { return parseInt(text) || 0 }
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 10
+                onValueChanged: if (cfg_iconSize !== value) cfg_iconSize = value
+            }
+            QQC2.Label {
+                text: cfg_iconSize === 0 ? tr("Auto") : cfg_iconSize + "px"
+                Layout.preferredWidth: Kirigami.Units.gridUnit * 3
             }
         }
 

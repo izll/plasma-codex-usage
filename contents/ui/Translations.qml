@@ -18,6 +18,7 @@ QtObject {
     readonly property var strings: ({
         "en_US": {
             "Metrics size (panel and popup):": "Metrics size (panel and popup):",
+            "Ring logo size:": "Ring logo size:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Colors",
@@ -142,6 +143,7 @@ QtObject {
         },
         "hu_HU": {
             "Metrics size (panel and popup):": "Mérőszám méret (panel és felugró):",
+            "Ring logo size:": "Logó mérete a gyűrűben:",
             "Window labels:": "Ablak feliratok:",
             "Show 5h/7d on rings": "5h/7d a gyűrűkön",
             "Colors": "Színek",
@@ -266,6 +268,7 @@ QtObject {
         },
         "de_DE": {
             "Metrics size (panel and popup):": "Metrikgröße (Leiste und Popup):",
+            "Ring logo size:": "Logogröße im Ring:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Farben",
@@ -384,6 +387,7 @@ QtObject {
         },
         "fr_FR": {
             "Metrics size (panel and popup):": "Taille des métriques (panneau et fenêtre):",
+            "Ring logo size:": "Taille du logo dans l'anneau :",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Couleurs",
@@ -502,6 +506,7 @@ QtObject {
         },
         "es_ES": {
             "Metrics size (panel and popup):": "Tamaño de las métricas (panel y ventana):",
+            "Ring logo size:": "Tamaño del logo en el anillo:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Colores",
@@ -620,6 +625,7 @@ QtObject {
         },
         "it_IT": {
             "Metrics size (panel and popup):": "Dimensione metriche (pannello e popup):",
+            "Ring logo size:": "Dimensione logo nell'anello:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Colori",
@@ -738,6 +744,7 @@ QtObject {
         },
         "pt_BR": {
             "Metrics size (panel and popup):": "Tamanho das métricas (painel e popup):",
+            "Ring logo size:": "Tamanho do logo no anel:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Cores",
@@ -856,6 +863,7 @@ QtObject {
         },
         "ru_RU": {
             "Metrics size (panel and popup):": "Размер метрик (панель и окно):",
+            "Ring logo size:": "Размер логотипа в кольце:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Цвета",
@@ -974,6 +982,7 @@ QtObject {
         },
         "pl_PL": {
             "Metrics size (panel and popup):": "Rozmiar wskaźników (panel i okno):",
+            "Ring logo size:": "Rozmiar logo w pierścieniu:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Kolory",
@@ -1092,6 +1101,7 @@ QtObject {
         },
         "nl_NL": {
             "Metrics size (panel and popup):": "Metriekgrootte (paneel en pop-up):",
+            "Ring logo size:": "Logogrootte in ring:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Kleuren",
@@ -1210,6 +1220,7 @@ QtObject {
         },
         "tr_TR": {
             "Metrics size (panel and popup):": "Ölçüm boyutu (panel ve açılır pencere):",
+            "Ring logo size:": "Halka içindeki logo boyutu:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "Renkler",
@@ -1328,6 +1339,7 @@ QtObject {
         },
         "ja_JP": {
             "Metrics size (panel and popup):": "メトリクスサイズ (パネルとポップアップ):",
+            "Ring logo size:": "リング内のロゴサイズ:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "色",
@@ -1446,6 +1458,7 @@ QtObject {
         },
         "ko_KR": {
             "Metrics size (panel and popup):": "지표 크기 (패널 및 팝업):",
+            "Ring logo size:": "링 안 로고 크기:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "색상",
@@ -1564,6 +1577,7 @@ QtObject {
         },
         "zh_CN": {
             "Metrics size (panel and popup):": "指标大小 (面板和弹窗):",
+            "Ring logo size:": "圆环内徽标大小:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "颜色",
@@ -1682,6 +1696,7 @@ QtObject {
         },
         "zh_TW": {
             "Metrics size (panel and popup):": "指標大小 (面板和彈出視窗):",
+            "Ring logo size:": "圓環內標誌大小:",
             "Window labels:": "Window labels:",
             "Show 5h/7d on rings": "Show 5h/7d on rings",
             "Colors": "顏色",
