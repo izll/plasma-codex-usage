@@ -689,7 +689,7 @@ Item {
                         PlasmaComponents.Label {
                             id: updateLabel
                             anchors.centerIn: parent
-                            text: "⬆ " + root.latestVersion + " " + i18n.tr("available")
+                            text: "⬆ Codex " + root.latestVersion + " " + i18n.tr("available")
                             font.pixelSize: Kirigami.Theme.smallFont.pixelSize
                             font.bold: true; color: full.accent
                         }
