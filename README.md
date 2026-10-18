@@ -20,6 +20,7 @@ A KDE Plasma 6 widget that displays your OpenAI Codex CLI usage statistics in th
 - **Tabbed Settings**: General, Panel and Popup tabs
 - **Desktop Notifications**: Alerts when usage crosses thresholds
 - **Update Checker**: Dot on the panel icon when a new Codex CLI version is available
+- **Widget Update Notice**: Green badge in the popup when a newer version of the widget is on the KDE Store, opening "Get New Widgets"
 - **Process Visibility**: Hide widget or usage when Codex is not running
 - **Configurable Refresh**: Adjustable polling interval
 - **Local Cache**: Remembers last data on restart
