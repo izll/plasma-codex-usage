@@ -74,6 +74,10 @@
             <label>Check for Codex CLI updates via npm registry</label>
             <default>true</default>
         </entry>
+        <entry name="checkWidgetUpdates" type="Bool">
+            <label>Check the KDE Store for a newer version of this widget</label>
+            <default>true</default>
+        </entry>
         <entry name="cardOrder" type="String">
             <label>Card visibility and order in popup as JSON array [{id, enabled}]</label>
             <default>[{"id":"account","enabled":true},{"id":"usage","enabled":true},{"id":"tokens","enabled":true},{"id":"trend","enabled":true},{"id":"links","enabled":true}]</default>

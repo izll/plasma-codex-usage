@@ -701,6 +701,32 @@ Item {
                         }
                     }
 
+                    // Widget update: green pill, opens "Get New Widgets"
+                    Rectangle {
+                        visible: root.widgetUpdateAvailable
+                        Layout.preferredWidth: widgetUpdateLabel.implicitWidth + Kirigami.Units.largeSpacing
+                        Layout.preferredHeight: widgetUpdateLabel.implicitHeight + Kirigami.Units.smallSpacing
+                        radius: height / 2
+                        color: Qt.alpha(Kirigami.Theme.positiveTextColor, widgetUpdateMouse.containsMouse ? 0.3 : 0.18)
+
+                        PlasmaComponents.Label {
+                            id: widgetUpdateLabel
+                            anchors.centerIn: parent
+                            text: "⬆ " + i18n.tr("Widget update") + " " + root.widgetLatestVersion
+                            font.pixelSize: Kirigami.Theme.smallFont.pixelSize
+                            font.bold: true
+                            color: Kirigami.Theme.positiveTextColor
+                        }
+
+                        MouseArea {
+                            id: widgetUpdateMouse
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: root.openWidgetUpdates()
+                        }
+                    }
+
                     // fillWidth + minimumWidth 0 so the status text can actually
                     // elide. Without it the row's minimum width grows with the
                     // text ("Updated 3m ago · Next update in 2m") and pushes the

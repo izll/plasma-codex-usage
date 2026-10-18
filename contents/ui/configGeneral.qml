@@ -8,6 +8,7 @@ import QtQuick.Controls as QQC2
 import QtQuick.Layouts
 import org.kde.kirigami as Kirigami
 import org.kde.kcmutils as KCM
+import org.kde.plasma.plasma5support as Plasma5Support
 
 KCM.SimpleKCM {
     id: configPage
@@ -16,9 +17,64 @@ KCM.SimpleKCM {
     property int cfg_refreshInterval
     property bool cfg_enableNotifications
     property bool cfg_enableUpdateCheck
+    property bool cfg_checkWidgetUpdates
     property bool cfg_useTimeAwareColors
     property string cfg_processVisibility
     property int cfg_processCheckInterval
+
+    // Widget version: the installed one from the package's metadata.json,
+    // the latest one from the KDE Store (only when update checks are on).
+    readonly property string storeProductId: "2369904"
+    property string installedVersion: ""
+    property string storeVersion: ""
+    readonly property bool widgetUpdateAvailable: installedVersion !== "" && storeVersion !== ""
+        && isNewerVersion(storeVersion, installedVersion)
+
+    function isNewerVersion(a, b) {
+        var pa = a.split(".").map(Number)
+        var pb = b.split(".").map(Number)
+        for (var i = 0; i < 3; i++) {
+            if ((pa[i] || 0) > (pb[i] || 0)) return true
+            if ((pa[i] || 0) < (pb[i] || 0)) return false
+        }
+        return false
+    }
+
+    Plasma5Support.DataSource {
+        id: versionSource
+        engine: "executable"
+        connectedSources: []
+
+        onNewData: function(sourceName, data) {
+            var stdout = data["stdout"] || ""
+            disconnectSource(sourceName)
+            if (sourceName.indexOf("cat ") === 0) {
+                try { configPage.installedVersion = JSON.parse(stdout).KPlugin.Version || "" } catch (e) {}
+            } else if (sourceName.indexOf("curl ") === 0) {
+                var m = stdout.match(/<content[^>]*>[\s\S]*?<version>([^<]+)<\/version>/)
+                if (m) configPage.storeVersion = m[1].trim()
+            }
+        }
+    }
+
+    function checkStoreVersion() {
+        if (cfg_checkWidgetUpdates)
+            versionSource.connectSource("curl -sS --max-time 10 https://api.kde-look.org/ocs/v1/content/data/" + storeProductId + " 2>/dev/null")
+    }
+
+    function openWidgetUpdates() {
+        versionSource.connectSource("sh -c 'if command -v knewstuff-dialog6 >/dev/null; then setsid knewstuff-dialog6 plasmoids.knsrc; "
+            + "elif command -v plasma-discover >/dev/null; then setsid plasma-discover --mode update; "
+            + "else xdg-open https://store.kde.org/p/" + storeProductId + "; fi >/dev/null 2>&1 &'")
+    }
+
+    Component.onCompleted: {
+        var metadata = decodeURIComponent(Qt.resolvedUrl("../../metadata.json").toString().replace("file://", ""))
+        versionSource.connectSource("cat '" + metadata + "'")
+        checkStoreVersion()
+    }
+
+    onCfg_checkWidgetUpdatesChanged: if (cfg_checkWidgetUpdates && storeVersion === "") checkStoreVersion()
 
     // Translation helper
     Translations {
@@ -94,6 +150,40 @@ KCM.SimpleKCM {
             text: tr("Check for Codex CLI updates")
             checked: cfg_enableUpdateCheck
             onCheckedChanged: cfg_enableUpdateCheck = checked
+        }
+
+        QQC2.CheckBox {
+            text: tr("Check for widget updates")
+            checked: cfg_checkWidgetUpdates
+            onCheckedChanged: cfg_checkWidgetUpdates = checked
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: tr("Widget version:")
+            spacing: Kirigami.Units.smallSpacing
+
+            QQC2.Label {
+                text: configPage.installedVersion || "…"
+            }
+
+            QQC2.Label {
+                visible: cfg_checkWidgetUpdates && configPage.storeVersion !== "" && !configPage.widgetUpdateAvailable
+                text: "✓ " + tr("Up to date")
+                opacity: 0.7
+            }
+
+            QQC2.Label {
+                visible: configPage.widgetUpdateAvailable
+                text: "⬆ " + configPage.storeVersion + " " + tr("available")
+                font.bold: true
+            }
+
+            QQC2.Button {
+                visible: configPage.widgetUpdateAvailable
+                text: tr("Update")
+                icon.name: "update-none"
+                onClicked: configPage.openWidgetUpdates()
+            }
         }
 
         Kirigami.Separator {
