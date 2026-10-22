@@ -58,6 +58,14 @@
             <label>Show weekly usage in panel</label>
             <default>true</default>
         </entry>
+        <entry name="usageCache" type="String">
+            <label>Last usage data (internal cache, JSON)</label>
+            <default></default>
+        </entry>
+        <entry name="usageCacheTime" type="String">
+            <label>When the usage data was last read (ms since epoch, internal)</label>
+            <default></default>
+        </entry>
         <entry name="quickLinks" type="String">
             <label>Quick links as JSON array [{name, url, icon}]</label>
             <default>[]</default>

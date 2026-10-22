@@ -130,18 +130,67 @@ PlasmoidItem {
     }
 
     // ────────────────────────────────────────────────
-    // Cache writer
+    // Cache
     // ────────────────────────────────────────────────
-    Plasma5Support.DataSource {
-        id: cacheWriter
-        engine: "executable"
-        connectedSources: []
-        onNewData: function(sourceName, data) { disconnectSource(sourceName) }
+    // It lives in a hidden config entry, so saving it runs no process. It used
+    // to be written with `echo '<json>' > file`: every save was a new
+    // executable source named after the whole JSON (up to ~20 KB with the
+    // trend samples), and plasma5support keeps every source name it has seen
+    // as a property of each DataSource in plasmashell, which grew by megabytes
+    // per save. The old file is still read once, to carry its data over.
+    property string lastSavedCache: ""
+
+    function applyCache(cache, timestamp) {
+        var age = Date.now() - (timestamp || 0)
+        if (age >= 86400000) {
+            console.log("Codex Usage: Cache too old, ignoring")
+            return
+        }
+        root.weeklyUsagePercent = cache.weekly || 0
+        root.weeklyWindowMinutes = cache.weeklyWindowMinutes || 10080
+        root.weeklyResetTime = cache.weeklyResetTs ? new Date(cache.weeklyResetTs) : null
+        root.hasSecondary = cache.hasSecondary || false
+        root.secondaryUsagePercent = cache.secondary || 0
+        root.secondaryWindowMinutes = cache.secondaryWindowMinutes || 0
+        root.secondaryResetTime = cache.secondaryResetTs ? new Date(cache.secondaryResetTs) : null
+        root.planName = cache.plan || ""
+        root.totalInputTokens = cache.totalInput || 0
+        root.totalOutputTokens = cache.totalOutput || 0
+        root.totalCachedTokens = cache.totalCached || 0
+        root.totalReasoningTokens = cache.totalReasoning || 0
+        root.lastInputTokens = cache.lastInput || 0
+        root.lastOutputTokens = cache.lastOutput || 0
+        var cachedSamples = cache.samples || []
+        var mergedS = cachedSamples.concat(root.usageSamples)
+        mergedS.sort(function(a, b) { return a.t - b.t })
+        var dedupS = []
+        for (var si = 0; si < mergedS.length; si++) {
+            if (dedupS.length === 0 || mergedS[si].t > dedupS[dedupS.length - 1].t) dedupS.push(mergedS[si])
+        }
+        root.usageSamples = dedupS
+        root.lastSuccessTime = timestamp
+        root.lastUpdate = Qt.formatTime(new Date(timestamp), "hh:mm:ss") + " *"
+        root.isStale = age > root.staleThresholdMs
+        console.log("Codex Usage: Loaded cache, age:", Math.round(age / 60000), "min, stale:", root.isStale)
+        root.cacheLoaded = true
     }
 
-    // ────────────────────────────────────────────────
-    // Cache reader
-    // ────────────────────────────────────────────────
+    function loadCache() {
+        var stored = Plasmoid.configuration.usageCache || ""
+        if (stored.length > 10) {
+            try {
+                applyCache(JSON.parse(stored), Number(Plasmoid.configuration.usageCacheTime) || 0)
+                root.lastSavedCache = stored
+            } catch (e) {
+                console.log("Codex Usage: Cache parse error:", e)
+            }
+            root.cacheLoaded = true
+            return
+        }
+        cacheReader.connectSource("cat $HOME/.local/share/codex-usage-cache.json 2>/dev/null")
+    }
+
+    // Reads the cache file of earlier versions (once, until the first save)
     Plasma5Support.DataSource {
         id: cacheReader
         engine: "executable"
@@ -150,42 +199,11 @@ PlasmoidItem {
         onNewData: function(sourceName, data) {
             var stdout = (data["stdout"] || "").trim()
             disconnectSource(sourceName)
-            if (sourceName.indexOf("codex-usage-cache") !== -1) root.cacheLoaded = true
+            root.cacheLoaded = true
             if (stdout.length > 10) {
                 try {
                     var cache = JSON.parse(stdout)
-                    var age = Date.now() - (cache.timestamp || 0)
-                    if (age < 86400000) {
-                        root.weeklyUsagePercent = cache.weekly || 0
-                        root.weeklyWindowMinutes = cache.weeklyWindowMinutes || 10080
-                        root.weeklyResetTime = cache.weeklyResetTs ? new Date(cache.weeklyResetTs) : null
-                        root.hasSecondary = cache.hasSecondary || false
-                        root.secondaryUsagePercent = cache.secondary || 0
-                        root.secondaryWindowMinutes = cache.secondaryWindowMinutes || 0
-                        root.secondaryResetTime = cache.secondaryResetTs ? new Date(cache.secondaryResetTs) : null
-                        root.planName = cache.plan || ""
-                        root.totalInputTokens = cache.totalInput || 0
-                        root.totalOutputTokens = cache.totalOutput || 0
-                        root.totalCachedTokens = cache.totalCached || 0
-                        root.totalReasoningTokens = cache.totalReasoning || 0
-                        root.lastInputTokens = cache.lastInput || 0
-                        root.lastOutputTokens = cache.lastOutput || 0
-                        var cachedSamples = cache.samples || []
-                        var mergedS = cachedSamples.concat(root.usageSamples)
-                        mergedS.sort(function(a, b) { return a.t - b.t })
-                        var dedupS = []
-                        for (var si = 0; si < mergedS.length; si++) {
-                            if (dedupS.length === 0 || mergedS[si].t > dedupS[dedupS.length - 1].t) dedupS.push(mergedS[si])
-                        }
-                        root.usageSamples = dedupS
-                        root.lastSuccessTime = cache.timestamp
-                        root.lastUpdate = Qt.formatTime(new Date(cache.timestamp), "hh:mm:ss") + " *"
-                        root.isStale = age > root.staleThresholdMs
-                        console.log("Codex Usage: Loaded cache, age:", Math.round(age / 60000), "min, stale:", root.isStale)
-                        root.cacheLoaded = true
-                    } else {
-                        console.log("Codex Usage: Cache too old, ignoring")
-                    }
+                    applyCache(cache, cache.timestamp)
                 } catch (e) {
                     console.log("Codex Usage: Cache parse error:", e)
                 }
@@ -209,11 +227,15 @@ PlasmoidItem {
             totalReasoning: root.totalReasoningTokens,
             lastInput: root.lastInputTokens,
             lastOutput: root.lastOutputTokens,
-            samples: root.usageSamples,
-            timestamp: Date.now()
+            samples: root.usageSamples
         }
         var json = JSON.stringify(cache)
-        cacheWriter.connectSource("echo '" + json.replace(/'/g, "'\\''") + "' > $HOME/.local/share/codex-usage-cache.json")
+        if (json !== root.lastSavedCache) {
+            Plasmoid.configuration.usageCache = json
+            root.lastSavedCache = json
+        }
+        // The age decides whether the cached values are shown after a restart.
+        Plasmoid.configuration.usageCacheTime = String(Date.now())
     }
 
     // ────────────────────────────────────────────────
@@ -245,14 +267,16 @@ PlasmoidItem {
     // ────────────────────────────────────────────────
     // Process checker (visibility feature)
     // ────────────────────────────────────────────────
+    // Polled while the visibility setting needs it, as one persistent source
     Plasma5Support.DataSource {
         id: processChecker
         engine: "executable"
-        connectedSources: []
+        interval: Math.max(Plasmoid.configuration.processCheckInterval || 30, 5) * 1000
+        connectedSources: (Plasmoid.configuration.processVisibility || "always") !== "always"
+            ? ["pgrep -f codex 2>/dev/null"] : []
 
         onNewData: function(sourceName, data) {
             var stdout = data["stdout"] || ""
-            disconnectSource(sourceName)
 
             var wasRunning = root.codexRunning
             root.codexRunning = stdout.trim().length > 0
@@ -270,10 +294,8 @@ PlasmoidItem {
         }
     }
 
-    function checkCodexProcess() {
-        processChecker.connectSource("pgrep -f codex 2>/dev/null")
-    }
-
+    // processChecker runs as soon as its source is connected and corrects the
+    // status from there; until then the last known state is used.
     function updateProcessVisibility() {
         var vis = Plasmoid.configuration.processVisibility || "always"
         if (vis === "always") {
@@ -281,19 +303,9 @@ PlasmoidItem {
             Plasmoid.status = PlasmaCore.Types.ActiveStatus
         } else if (vis === "hide_usage") {
             Plasmoid.status = PlasmaCore.Types.ActiveStatus
-            checkCodexProcess()
         } else {
-            Plasmoid.status = PlasmaCore.Types.HiddenStatus
-            checkCodexProcess()
+            Plasmoid.status = root.codexRunning ? PlasmaCore.Types.ActiveStatus : PlasmaCore.Types.HiddenStatus
         }
-    }
-
-    Timer {
-        id: processCheckTimer
-        interval: Math.max(Plasmoid.configuration.processCheckInterval || 30, 5) * 1000
-        running: (Plasmoid.configuration.processVisibility || "always") !== "always"
-        repeat: true
-        onTriggered: checkCodexProcess()
     }
 
     Connections {
@@ -394,14 +406,16 @@ PlasmoidItem {
         updateChecker.connectSource("curl -sS --max-time 10 https://registry.npmjs.org/@openai/codex/latest 2>/dev/null")
     }
 
-    // Version recheck timer: runs while updateAvailable to detect upgrade
+    // While an update is shown, notice the upgrade: every 30 minutes and
+    // whenever the popup opens (it used to run every minute).
+    onExpandedChanged: if (expanded && root.updateAvailable) versionReader.connectSource("codex --version 2>/dev/null")
+
     Timer {
         id: versionRecheckTimer
-        interval: 60000
+        interval: 1800000
         running: root.updateAvailable && Plasmoid.configuration.enableUpdateCheck !== false
         repeat: true
         onTriggered: versionReader.connectSource("codex --version 2>/dev/null")
-        onRunningChanged: if (running) versionReader.connectSource("codex --version 2>/dev/null")
     }
 
     // ────────────────────────────────────────────────
@@ -1421,7 +1435,7 @@ PlasmoidItem {
         reloadQuickLinks()
         var iconSource = Qt.resolvedUrl("../icons/codex-usage-widget.svg").toString().replace("file://", "")
         iconInstaller.connectSource("bash -c 'ICON_DIR=${XDG_DATA_HOME:-$HOME/.local/share}/icons/hicolor/scalable/apps && mkdir -p $ICON_DIR && cp \"" + iconSource + "\" $ICON_DIR/codex-usage-widget.svg && chmod 644 $ICON_DIR/codex-usage-widget.svg 2>/dev/null'")
-        cacheReader.connectSource("cat $HOME/.local/share/codex-usage-cache.json 2>/dev/null")
+        loadCache()
         authReader.connectSource("cat ${CODEX_CONFIG_DIR:-$HOME/.codex}/auth.json 2>/dev/null")
         versionReader.connectSource("codex --version 2>/dev/null")
         if (Plasmoid.configuration.enableUpdateCheck !== false) checkForUpdate()
