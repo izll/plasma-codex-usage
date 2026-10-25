@@ -132,13 +132,31 @@ PlasmoidItem {
     // ────────────────────────────────────────────────
     // Cache
     // ────────────────────────────────────────────────
-    // It lives in a hidden config entry, so saving it runs no process. It used
-    // to be written with `echo '<json>' > file`: every save was a new
-    // executable source named after the whole JSON (up to ~20 KB with the
-    // trend samples), and plasma5support keeps every source name it has seen
-    // as a property of each DataSource in plasmashell, which grew by megabytes
-    // per save. The old file is still read once, to carry its data over.
+    // Saving it must not run a process: it used to be written with
+    // `echo '<json>' > file`, so every save was a new executable source named
+    // after the whole JSON (up to ~20 KB with the trend samples), and
+    // plasma5support keeps every source name it has seen as a property of
+    // each DataSource in plasmashell, which grew by megabytes per save.
+    //
+    // It lives in LocalStorage (SQLite), shared by all instances. Without the
+    // LocalStorage module it falls back to a hidden config entry, which 1.3.2
+    // used. The old cache file is still read once, to carry it over.
+    Loader {
+        id: cacheStoreLoader
+        source: "CacheStore.qml"
+        onLoaded: item.dbName = "CodexUsageWidget"
+    }
+    readonly property var cacheStore: cacheStoreLoader.status === Loader.Ready ? cacheStoreLoader.item : null
+    readonly property string cacheKey: "cache"
     property string lastSavedCache: ""
+
+    // The config copy is only needed without LocalStorage
+    function dropConfigCache() {
+        if ((Plasmoid.configuration.usageCache || "") !== "" || (Plasmoid.configuration.usageCacheTime || "") !== "") {
+            Plasmoid.configuration.usageCache = ""
+            Plasmoid.configuration.usageCacheTime = ""
+        }
+    }
 
     function applyCache(cache, timestamp) {
         var age = Date.now() - (timestamp || 0)
@@ -176,6 +194,21 @@ PlasmoidItem {
     }
 
     function loadCache() {
+        if (root.cacheStore) {
+            var json = root.cacheStore.read(root.cacheKey)
+            if (json.length > 10) {
+                try {
+                    var cache = JSON.parse(json)
+                    applyCache(cache, cache.timestamp)
+                    dropConfigCache()
+                } catch (e) {
+                    console.log("Codex Usage: Cache parse error:", e)
+                }
+                root.cacheLoaded = true
+                return
+            }
+        }
+        // No LocalStorage row yet: the config entry of 1.3.2, else the old file
         var stored = Plasmoid.configuration.usageCache || ""
         if (stored.length > 10) {
             try {
@@ -229,12 +262,21 @@ PlasmoidItem {
             lastOutput: root.lastOutputTokens,
             samples: root.usageSamples
         }
+        if (root.cacheStore) {
+            // The age decides whether the cached values are shown after a restart.
+            cache.timestamp = Date.now()
+            if (root.cacheStore.write(root.cacheKey, JSON.stringify(cache))) {
+                dropConfigCache()
+                return
+            }
+        }
+        // Without LocalStorage: the config entry, written only when the data
+        // changes, its timestamp separately
         var json = JSON.stringify(cache)
         if (json !== root.lastSavedCache) {
             Plasmoid.configuration.usageCache = json
             root.lastSavedCache = json
         }
-        // The age decides whether the cached values are shown after a restart.
         Plasmoid.configuration.usageCacheTime = String(Date.now())
     }
 
